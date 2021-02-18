@@ -20,5 +20,13 @@ Sample code
 	public ResponseEntity dynamicPojoValidation(@RequestBody MainPojo jsonObject) {
 		return  new ResponseEntity<>(jsonObject, HttpStatus.ACCEPTED);
 	}
+	
+	
+-----------------------SpringBoot Application component scan-----------------------
+
+	@SpringBootApplication
+@ComponentScan({"lk.open.validator", "lk.dialog.crm"})
+public class RestServiceApplication {
+
 
 
