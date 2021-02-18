@@ -24,8 +24,8 @@ Sample code
 	
 -----------------------SpringBoot Application component scan-----------------------
 
-	@SpringBootApplication
-@ComponentScan({"lk.open.validator", "lk.dialog.crm"})
+@SpringBootApplication
+@ComponentScan({"lk.open.validator", "<your main package example com.demo.project>"})
 public class RestServiceApplication {
 
 
