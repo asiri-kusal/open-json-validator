@@ -1,0 +1,71 @@
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "gender": "abc",
+  "age": 3,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "SL",
+    "postalCode": "10021"
+  },
+  "userCharacteristics":[
+    {
+      "name": "userCharacteristics name 01",
+      "value": "userCharacteristics value 01"
+    },
+    {
+      "name": "userCharacteristics name 02",
+      "value": "userCharacteristics value 02"
+
+    }
+  ],
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "0715643094"
+    },
+    {
+      "type": "fax",
+      "number": "123-456-7890"
+    }
+  ],
+  "companyList": [
+    {
+      "name": "D2",
+      "projects": [
+        {
+          "id": "001",
+          "name": "crm rw",
+          "category": [
+            {
+              "id": "001",
+              "name": "crm-cat-01"
+            },
+            {
+              "id": "002",
+              "name": "crm-cat-02"
+            }
+          ]
+        },
+        {
+          "id": "002",
+          "name": "saga"
+        }
+      ]
+    },
+    {
+      "name": "M1",
+      "projects": [
+        {
+          "id": "003",
+          "name": "mobile app"
+        },
+        {
+          "id": "004",
+          "name": "innovation project"
+        }
+      ]
+    }
+  ]
+}
