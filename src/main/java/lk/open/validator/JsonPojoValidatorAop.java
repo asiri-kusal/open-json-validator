@@ -24,7 +24,7 @@ public class JsonPojoValidatorAop {
     private ObjectMapper objectMapper;
 
     @Around("@annotation(lk.open.validator.JsonPojoValidator)")
-    public void validatePojo(ProceedingJoinPoint point) throws Throwable {
+    public Object validatePojo(ProceedingJoinPoint point) throws Throwable {
 
         Object[] arguments = point.getArgs();
         if (arguments == null) {
@@ -37,6 +37,6 @@ public class JsonPojoValidatorAop {
         if (!CollectionUtils.isEmpty(errorWrapper.getErrorList())) {
             throw new RuntimeException(errors);
         }
-
+        return point.proceed();
     }
 }

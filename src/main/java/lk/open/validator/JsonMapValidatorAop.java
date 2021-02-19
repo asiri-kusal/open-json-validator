@@ -24,8 +24,7 @@ public class JsonMapValidatorAop {
     private ObjectMapper objectMapper;
 
     @Around("@annotation(lk.open.validator.JsonMapValidator)")
-    public void validateMap(ProceedingJoinPoint point) throws Exception {
-
+    public Object validateMap(ProceedingJoinPoint point) throws Throwable {
         Object[] arguments = point.getArgs();
         if (arguments == null) {
             throw new RuntimeException("Json binding failure");
@@ -35,6 +34,6 @@ public class JsonMapValidatorAop {
         if (!CollectionUtils.isEmpty(errorWrapper.getErrorList())) {
             throw new RuntimeException(json);
         }
-
+        return point.proceed();
     }
 }
