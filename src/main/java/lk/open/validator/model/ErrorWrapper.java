@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorWrapper {
-    private List<String> errorList;
+    private List<ErrorMessage> errorList;
 
-    public List<String> getErrorList() {
+    public List<ErrorMessage> getErrorList() {
         return errorList;
     }
 
-    public void setErrorList(List<String> errorList) {
+    public void setErrorList(List<ErrorMessage> errorList) {
         this.errorList = errorList;
     }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import lk.open.validator.model.ErrorMessage;
 import lk.open.validator.model.ErrorWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +21,7 @@ public class DynamicJsonValidator {
     Map<String, Object> getValidationSchema;
 
     public ErrorWrapper errorList(Map<String, Object> jsonMap) {
-        List<String> errorList = new ArrayList<>();
+        List<ErrorMessage> errorList = new ArrayList<>();
         ErrorWrapper errorWrapper = new ErrorWrapper();
         errorWrapper.setErrorList(
             validateJsonMap(jsonMap, (Map<String, Object>) getValidationSchema.get("validationSchema"), "root",
@@ -28,8 +29,8 @@ public class DynamicJsonValidator {
         return errorWrapper;
     }
 
-    public List<String> validateJsonMap(Map<String, Object> stringObjectMap, Map<String, Object> validationMap,
-                                        String subLevelKey, List<String> errorList, Integer index) {
+    public List<ErrorMessage> validateJsonMap(Map<String, Object> stringObjectMap, Map<String, Object> validationMap,
+                                              String subLevelKey, List<ErrorMessage> errorList, Integer index) {
 
         for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
             String key = entry.getKey();
@@ -44,12 +45,13 @@ public class DynamicJsonValidator {
                     validateJsonMap(map, validationMap, subLevelKey, errorList, arrayIndex);
                     arrayIndex++;
                 }
+                subLevelKey = "root";
             }
             if (value instanceof Map) {
                 subLevelKey = key;
                 Map<String, Object> subMap = (Map<String, Object>) value;
                 validateJsonMap(subMap, validationMap, subLevelKey, errorList, null);
-
+                subLevelKey = "root";
             } else if (!CollectionUtils.isEmpty(validationSubMap)) {
                 for (Map<String, String> validation : validationSubMap) {
                     String validationValue = validation.get("level");
@@ -61,18 +63,21 @@ public class DynamicJsonValidator {
                     }
                 }
             }
+
         }
         return errorList;
     }
 
     private void generateError(String subLevelKey, String key, Object value,
-                               Map<String, String> validation, Integer index, List<String> errorList) {
+                               Map<String, String> validation, Integer index, List<ErrorMessage> errorList) {
         if (!validator(value, validation.get("pattern"))) {
-            String blockName =
-                "JsonBlock : " + subLevelKey + " , jsonField : " + key + " , value : " + value + " , " +
-                "errorMessage : " + validation.get("message");
-            String errorMessage = index != null ? blockName + " , arrayIndex : " + index : blockName;
-            errorList.add(errorMessage);
+            ErrorMessage message = new ErrorMessage();
+            message.setJsonBlock(subLevelKey);
+            message.setJsonField(key);
+            message.setValue(value);
+            message.setMessage(validation.get("message"));
+            message.setArrayIndex(index);
+            errorList.add(message);
         }
     }
 

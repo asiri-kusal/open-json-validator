@@ -3,6 +3,7 @@ package lk.open.validator;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lk.open.validator.configuration.exception.OpenValidatorException;
 import lk.open.validator.model.ErrorWrapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,9 +31,8 @@ public class JsonMapValidatorAop {
             throw new RuntimeException("Json binding failure");
         }
         ErrorWrapper errorWrapper = jsonValidator.errorList((Map<String, Object>) arguments[0]);
-        String json = objectMapper.writeValueAsString(errorWrapper);
         if (!CollectionUtils.isEmpty(errorWrapper.getErrorList())) {
-            throw new RuntimeException(json);
+            throw new OpenValidatorException(errorWrapper);
         }
         return point.proceed();
     }
