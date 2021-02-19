@@ -22,6 +22,8 @@ Sample code
 	}
 	
 	
+	* Note Please use @RequestBody as first parameter
+	
 -----------------------SpringBoot Application component scan-----------------------
 
 @SpringBootApplication
