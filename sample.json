@@ -1,12 +1,13 @@
 {
   "firstName": "John",
   "lastName": "Smith",
-  "gender": "abc",
-  "age": 3,
+  "nic": "my nic",
+  "gender": "men",
+  "age": 34,
   "address": {
     "streetAddress": "21 2nd Street",
     "city": "New York",
-    "state": "SL",
+    "state": "NY",
     "postalCode": "10021"
   },
   "userCharacteristics": [
@@ -22,7 +23,7 @@
   "phoneNumbers": [
     {
       "type": "home",
-      "number": "0715643094"
+      "number": "123-456-7890"
     },
     {
       "type": "fax",
@@ -31,7 +32,7 @@
   ],
   "companyList": [
     {
-      "name": "D2",
+      "name": "D1",
       "projects": [
         {
           "id": "001",
@@ -39,7 +40,7 @@
           "category": [
             {
               "id": "001",
-              "name": "crm-cat-01"
+              "name": "crm-cat-01-abc"
             },
             {
               "id": "002",
@@ -49,7 +50,7 @@
         },
         {
           "id": "002",
-          "name": "saga"
+          "name": "saga-crm"
         }
       ]
     },
@@ -62,7 +63,7 @@
         },
         {
           "id": "004",
-          "name": "innovation project"
+          "name": "innovation"
         }
       ]
     }

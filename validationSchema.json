@@ -31,7 +31,7 @@
       "pattern": "^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$"
     }
   ],
-  "id": [
+  "name": [
     {
       "level": "category",
       "key": "001",
@@ -51,6 +51,32 @@
       "key": "common",
       "message": "companyList should be D1 or M1",
       "pattern": "^(D1|M1)$"
+    }
+  ],
+  "mandatoryFields": [
+    {
+      "level": "root",
+      "key": "school",
+      "isEav": "false",
+      "message": "school is mandatory field"
+    },
+    {
+      "level": "root",
+      "key": "nic",
+      "isEav": "false",
+      "message": "nic is mandatory field"
+    },
+    {
+      "level": "projects",
+      "key": "004",
+      "isEav": "true",
+      "message": "companyList -> projects - > key -> 004 is mandatory field"
+    },
+    {
+      "level": "companyList",
+      "key": "D1",
+      "isEav": "true",
+      "message": "companyList -> name - > key -> D1 is mandatory field"
     }
   ]
 }
