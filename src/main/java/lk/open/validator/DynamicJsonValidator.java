@@ -123,7 +123,7 @@ public class DynamicJsonValidator {
                 checkMandatoryFields(subMap, subLevelKey);
                 subLevelKey = "root";
             }
-            if (isEav.equals("true") && value.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
+            if (isEav.equals("true") && Objects.nonNull(value) && value.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
                 isFieldExist = true;
             } else if (key.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
                 isFieldExist = true;
