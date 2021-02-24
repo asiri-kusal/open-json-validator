@@ -57,25 +57,31 @@
     {
       "level": "root",
       "key": "school",
-      "isEav": "false",
+      "type": "field",
+      "message": "school is mandatory field"
+    },
+    {
+      "level": "root",
+      "key": "phoneCharacteristics",
+      "type": "list",
       "message": "school is mandatory field"
     },
     {
       "level": "root",
       "key": "nic",
-      "isEav": "false",
+      "type": "field",
       "message": "nic is mandatory field"
     },
     {
       "level": "projects",
       "key": "004",
-      "isEav": "true",
+      "type": "eav",
       "message": "companyList -> projects - > key -> 004 is mandatory field"
     },
     {
       "level": "companyList",
       "key": "D1",
-      "isEav": "true",
+      "type": "eav",
       "message": "companyList -> name - > key -> D1 is mandatory field"
     }
   ]
