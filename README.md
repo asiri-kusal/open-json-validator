@@ -46,6 +46,12 @@ for controller advice
         });
 
     }
+    
+    acceptable types in mandatory block
+    list
+    object
+    eav
+    field
 
 
 
