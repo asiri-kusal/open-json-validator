@@ -26,12 +26,13 @@ public class DynamicJsonValidator {
     private String isEav;
     private boolean isFieldExist = false;
 
-    public ErrorWrapper errorList(Map<String, Object> jsonMap) {
+    public ErrorWrapper errorList(Map<String, Object> jsonMap, String schema) {
         List<ErrorMessage> errorList = new ArrayList<>();
         ErrorWrapper errorWrapper = new ErrorWrapper();
-        validateMandatoryFieldsInJsonMap(jsonMap, (Map<String, Object>) getValidationSchema.get("validationSchema"),
+        Map<String, Object> validationMap = (Map<String, Object>) getValidationSchema.get("validationSchema");
+        validateMandatoryFieldsInJsonMap(jsonMap, (Map<String, Object>) validationMap.get(schema),
                                          errorList);
-        validateJsonMap(jsonMap, (Map<String, Object>) getValidationSchema.get("validationSchema"), "root",
+        validateJsonMap(jsonMap, (Map<String, Object>) validationMap.get(schema), "root",
                         errorList, null);
         errorWrapper.setErrorList(errorList);
         return errorWrapper;
@@ -95,7 +96,7 @@ public class DynamicJsonValidator {
                     message.setMessage(validationMsg);
                     errorList.add(message);
                 }
-                isFieldExist =false;
+                isFieldExist = false;
             }
         }
         return errorList;
@@ -123,7 +124,8 @@ public class DynamicJsonValidator {
                 checkMandatoryFields(subMap, subLevelKey);
                 subLevelKey = "root";
             }
-            if (isEav.equals("true") && Objects.nonNull(value) && value.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
+            if (isEav.equals("true") && Objects.nonNull(value) && value.equals(schemaValidationKey) && subLevelKey
+                .equals(validationLevel)) {
                 isFieldExist = true;
             } else if (key.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
                 isFieldExist = true;

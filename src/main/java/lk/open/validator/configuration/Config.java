@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,16 +37,23 @@ public class Config {
 
     @Bean(name = "validationSchema")
     public Map<String, Object> getValidationSchema() throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:" + validationSchema);
-        String text;
-        StringBuffer sb = new StringBuffer();
-        try (final Reader reader = new InputStreamReader(resource.getInputStream())) {
-            BufferedReader br = new BufferedReader(reader);
-            while ((text = br.readLine()) != null) {
-                sb.append(text);
+        Map<String, Object> schemaMap = new HashMap<>();
+        String[] validationSchemaList = validationSchema.split(",");
+        if (validationSchemaList != null) {
+            for (String schema : validationSchemaList) {
+                Resource resource = resourceLoader.getResource("classpath:" + schema);
+                String text;
+                StringBuffer sb = new StringBuffer();
+                try (final Reader reader = new InputStreamReader(resource.getInputStream())) {
+                    BufferedReader br = new BufferedReader(reader);
+                    while ((text = br.readLine()) != null) {
+                        sb.append(text);
+                    }
+                }
+                schemaMap.put(schema, objectMapper().readValue(sb.toString(), Map.class));
             }
         }
-        return objectMapper().readValue(sb.toString(), Map.class);
+        return schemaMap;
     }
 
 }
