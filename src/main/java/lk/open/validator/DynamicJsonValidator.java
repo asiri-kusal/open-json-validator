@@ -119,6 +119,7 @@ public class DynamicJsonValidator {
                 mapList = new ArrayList<>();
                 isFieldExist = false;
             }
+            readCompletedKeys=new ArrayList<>();
         }
         return errorList;
     }
@@ -135,13 +136,13 @@ public class DynamicJsonValidator {
             }
             if (type.equals("eav") && readCompletedKeys.contains(value)) {
                 return false;
-            } else if (readCompletedKeys.contains(key)) {
-                return false;
             }
+
             String subLevelKey = level;
             if (value instanceof List) {
                 if (type.equals("list") && key.equals(schemaValidationKey)) {
                     isFieldExist = true;
+                    return true;
                 }
                 List<Map<String, Object>> valueMap = (List<Map<String, Object>>) value;
                 int idx = 0;
@@ -164,6 +165,7 @@ public class DynamicJsonValidator {
             if (value instanceof Map) {
                 if (type.equals("object") && key.equals(schemaValidationKey)) {
                     isFieldExist = true;
+                    return true;
                 }
                 subLevelKey = key;
                 Map<String, Object> subMap = (Map<String, Object>) value;
