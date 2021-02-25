@@ -52,6 +52,7 @@ for controller advice
     object
     eav
     field
+    object-list
 
 
 

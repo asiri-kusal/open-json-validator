@@ -1,6 +1,7 @@
 package lk.open.validator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,12 +20,14 @@ public class DynamicJsonValidator {
     @Autowired
     @Qualifier("validationSchema")
     Map<String, Object> getValidationSchema;
-
+    List<Map<String, Map<Integer, Boolean>>> mapList = new ArrayList<>();
     private String validationLevel;
     private String schemaValidationKey;
     private String validationMsg;
+    private Object lastIteratedKey;
     private String type;
     private boolean isFieldExist = false;
+    private List<String> readCompletedKeys = new ArrayList<>();
 
     public ErrorWrapper errorList(Map<String, Object> jsonMap, String schema) {
         List<ErrorMessage> errorList = new ArrayList<>();
@@ -88,56 +91,97 @@ public class DynamicJsonValidator {
                 schemaValidationKey = validation.get("key");
                 validationMsg = validation.get("message");
                 type = validation.get("type");
-                checkMandatoryFields(stringObjectMap, validationLevel);
-                if (!isFieldExist) {
+                checkMandatoryFields(stringObjectMap, validationLevel, 0);
+                readCompletedKeys.add(schemaValidationKey);
+                if (!CollectionUtils.isEmpty(mapList) && !type.equalsIgnoreCase("eav")) {
+                    for (Map<String, Map<Integer, Boolean>> matchingMap : mapList) {
+                        Map<Integer, Boolean> matches = matchingMap.get(schemaValidationKey);
+                        if (Objects.nonNull(matches) && matches.size() != 0) {
+                            for (Map.Entry<Integer, Boolean> match : matches.entrySet()) {
+                                if (!match.getValue()) {
+                                    ErrorMessage message = new ErrorMessage();
+                                    message.setJsonBlock(validationLevel);
+                                    message.setJsonField(schemaValidationKey);
+                                    message.setMessage(validationMsg);
+                                    message.setArrayIndex(match.getKey());
+                                    errorList.add(message);
+                                }
+                            }
+                        }
+                    }
+                } else if (!isFieldExist) {
                     ErrorMessage message = new ErrorMessage();
                     message.setJsonBlock(validationLevel);
                     message.setJsonField(schemaValidationKey);
                     message.setMessage(validationMsg);
                     errorList.add(message);
                 }
+                mapList = new ArrayList<>();
                 isFieldExist = false;
             }
         }
         return errorList;
     }
 
-    private void checkMandatoryFields(Map<String, Object> stringObjectMap, String level) {
+    private Boolean checkMandatoryFields(Map<String, Object> stringObjectMap, String level, int arrayIndex) {
+        isFieldExist = false;
         for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-
+            if (type.equals("eav")) {
+                lastIteratedKey = value;
+            } else {
+                lastIteratedKey = key;
+            }
+            if (type.equals("eav") && readCompletedKeys.contains(value)) {
+                return false;
+            } else if (readCompletedKeys.contains(key)) {
+                return false;
+            }
             String subLevelKey = level;
             if (value instanceof List) {
-                if (type.equals("list") && key.equals(schemaValidationKey)){
+                if (type.equals("list") && key.equals(schemaValidationKey)) {
                     isFieldExist = true;
                 }
                 List<Map<String, Object>> valueMap = (List<Map<String, Object>>) value;
-                int arrayIndex = 0;
+                int idx = 0;
+                Map<Integer, Boolean> integerBooleanMap;
+                Map<String, Map<Integer, Boolean>> matchingMap;
                 for (Map<String, Object> map : valueMap) {
+                    integerBooleanMap = new HashMap<>();
+                    matchingMap = new HashMap<>();
                     subLevelKey = key;
-                    checkMandatoryFields(map, subLevelKey);
-                    arrayIndex++;
+                    boolean isExist = checkMandatoryFields(map, subLevelKey, idx);
+                    if (subLevelKey.equals(validationLevel)) {
+                        integerBooleanMap.put(idx, isExist);
+                        matchingMap.put(schemaValidationKey, integerBooleanMap);
+                        mapList.add(matchingMap);
+                    }
+                    idx++;
                 }
                 subLevelKey = "root";
             }
             if (value instanceof Map) {
-                if (type.equals("object") && key.equals(schemaValidationKey)){
+                if (type.equals("object") && key.equals(schemaValidationKey)) {
                     isFieldExist = true;
                 }
                 subLevelKey = key;
                 Map<String, Object> subMap = (Map<String, Object>) value;
-                checkMandatoryFields(subMap, subLevelKey);
+                checkMandatoryFields(subMap, subLevelKey, arrayIndex);
                 subLevelKey = "root";
             }
             if (type.equals("eav") && Objects.nonNull(value) && value.equals(schemaValidationKey) && subLevelKey
                 .equals(validationLevel)) {
                 isFieldExist = true;
+            }
+            if (type.equals("object-list") && Objects.nonNull(value) && value.equals(schemaValidationKey) && subLevelKey
+                .equals(validationLevel)) {
+                isFieldExist = true;
             } else if (key.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
                 isFieldExist = true;
             }
-
         }
+        return isFieldExist;
     }
 
     private void generateError(String subLevelKey, String key, Object value,
