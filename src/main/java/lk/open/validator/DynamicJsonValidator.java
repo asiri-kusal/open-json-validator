@@ -71,9 +71,15 @@ public class DynamicJsonValidator {
                 for (Map<String, String> validation : validationSubMap) {
                     String validationValue = validation.get("level");
                     String validationKey = validation.get("key");
+                    Object type = validation.get("type");
+                    Object valueOfColumn = validation.get("valueColumnName");
                     if (validationValue.equalsIgnoreCase(subLevelKey) && validationKey.equals("common")) {
                         generateError(subLevelKey, key, value, validation, index, errorList);
                     } else if (validationValue.equalsIgnoreCase(subLevelKey) && value.equals(validationKey)) {
+                        if(Objects.nonNull(type) && type.equals("eav")){
+                            key=getStringValue(value);
+                            value=getStringValue(stringObjectMap.get(valueOfColumn));
+                        }
                         generateError(subLevelKey, key, value, validation, index, errorList);
                     }
                 }
@@ -198,16 +204,12 @@ public class DynamicJsonValidator {
                 isFieldExist = true;
             }
         }
-//        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
-//
-//        }
-
         return isFieldExist;
     }
 
     private void generateError(String subLevelKey, String key, Object value,
                                Map<String, String> validation, Integer index, List<ErrorMessage> errorList) {
-        if (!validator(value, validation.get("pattern"))) {
+        if (!checkIsValid(value, validation.get("pattern"))) {
             ErrorMessage message = new ErrorMessage();
             message.setJsonBlock(subLevelKey);
             message.setJsonField(key);
@@ -218,7 +220,7 @@ public class DynamicJsonValidator {
         }
     }
 
-    private boolean validator(Object obj, String pattern) {
+    private String getStringValue(Object obj) {
         String value = "";
         if (obj instanceof Integer) {
             value = Integer.toString((Integer) obj); //Convert int to String
@@ -236,10 +238,14 @@ public class DynamicJsonValidator {
             value = (String) obj;  //Convert long to String
         }
         if (Objects.isNull(value)) {
-            return false;
+            return value;
         }
+        return value;
+    }
+
+    private boolean checkIsValid(Object value, String pattern) {
         if (pattern.contains("\\") || pattern.contains("$") || pattern.contains("(")) {
-            return Pattern.matches(pattern, value);
+            return Pattern.matches(pattern, getStringValue(value));
         }
         return false;
     }
