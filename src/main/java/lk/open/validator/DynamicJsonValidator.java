@@ -2,13 +2,17 @@ package lk.open.validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
 import lk.open.validator.model.ErrorMessage;
 import lk.open.validator.model.ErrorWrapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,7 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 @Service
 public class DynamicJsonValidator {
-
+    private final static Logger LOGGER = LogManager.getLogger(DynamicJsonValidator.class);
     @Autowired
     @Qualifier("validationSchema")
     Map<String, Object> getValidationSchema;
@@ -119,14 +123,15 @@ public class DynamicJsonValidator {
                 mapList = new ArrayList<>();
                 isFieldExist = false;
             }
-            readCompletedKeys=new ArrayList<>();
+            readCompletedKeys = new ArrayList<>();
         }
         return errorList;
     }
 
     private Boolean checkMandatoryFields(Map<String, Object> stringObjectMap, String level, int arrayIndex) {
-        isFieldExist = false;
-        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
+        Iterator<Map.Entry<String, Object>> itr = stringObjectMap.entrySet().iterator();
+        while (itr.hasNext()) {
+            Map.Entry<String, Object> entry = itr.next();
             String key = entry.getKey();
             Object value = entry.getValue();
             if (type.equals("eav")) {
@@ -148,18 +153,26 @@ public class DynamicJsonValidator {
                 int idx = 0;
                 Map<Integer, Boolean> integerBooleanMap;
                 Map<String, Map<Integer, Boolean>> matchingMap;
-                for (Map<String, Object> map : valueMap) {
+                ListIterator<Map<String, Object>> iterator = valueMap.listIterator();
+                boolean isContainsKey = valueMap.stream().anyMatch(
+                    stringObjectMap1 -> stringObjectMap1.containsKey(schemaValidationKey));
+                while (iterator.hasNext()) {
                     integerBooleanMap = new HashMap<>();
                     matchingMap = new HashMap<>();
                     subLevelKey = key;
-                    boolean isExist = checkMandatoryFields(map, subLevelKey, idx);
-                    if (subLevelKey.equals(validationLevel)) {
-                        integerBooleanMap.put(idx, isExist);
-                        matchingMap.put(schemaValidationKey, integerBooleanMap);
-                        mapList.add(matchingMap);
+                    Map<String, Object> subMap = iterator.next();
+                    if (isContainsKey) {
+                        boolean isExist = checkMandatoryFields(subMap, subLevelKey, idx);
+                        if (subLevelKey.equals(validationLevel)) {
+                            integerBooleanMap.put(idx, isExist);
+                            matchingMap.put(schemaValidationKey, integerBooleanMap);
+                            mapList.add(matchingMap);
+                        }
+                        isFieldExist = false;
                     }
                     idx++;
                 }
+
                 subLevelKey = "root";
             }
             if (value instanceof Map) {
@@ -176,13 +189,19 @@ public class DynamicJsonValidator {
                 .equals(validationLevel)) {
                 isFieldExist = true;
             }
-            if (type.equals("object-list") && Objects.nonNull(value) && value.equals(schemaValidationKey) && subLevelKey
-                .equals(validationLevel)) {
+            if (type.equals("object-list") && Objects.nonNull(value) && key
+                .equals(schemaValidationKey) && subLevelKey
+                    .equals(validationLevel)) {
                 isFieldExist = true;
+
             } else if (key.equals(schemaValidationKey) && subLevelKey.equals(validationLevel)) {
                 isFieldExist = true;
             }
         }
+//        for (Map.Entry<String, Object> entry : stringObjectMap.entrySet()) {
+//
+//        }
+
         return isFieldExist;
     }
 
