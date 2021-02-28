@@ -1,4 +1,4 @@
-package lk.open.validator;
+package com.github.jsonmapvalidator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-import lk.open.validator.model.ErrorMessage;
+import com.github.jsonmapvalidator.model.ErrorMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

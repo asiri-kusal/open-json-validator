@@ -1,4 +1,4 @@
-package lk.open.validator.model;
+package com.github.jsonmapvalidator.model;
 
 import java.util.List;
 

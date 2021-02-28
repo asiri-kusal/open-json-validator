@@ -1,4 +1,4 @@
-package lk.open.validator.model;
+package com.github.jsonmapvalidator.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

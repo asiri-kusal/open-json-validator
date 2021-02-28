@@ -1,4 +1,4 @@
-package lk.open.validator;
+package com.github.jsonmapvalidator;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
 
-import lk.open.validator.model.ErrorMessage;
-import lk.open.validator.model.ErrorWrapper;
+import com.github.jsonmapvalidator.model.ErrorMessage;
+import com.github.jsonmapvalidator.model.ErrorWrapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

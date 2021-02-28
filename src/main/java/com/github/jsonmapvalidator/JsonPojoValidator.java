@@ -1,4 +1,4 @@
-package lk.open.validator;
+package com.github.jsonmapvalidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

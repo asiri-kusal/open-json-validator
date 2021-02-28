@@ -1,6 +1,6 @@
-package lk.open.validator.configuration.exception;
+package com.github.jsonmapvalidator.configuration.exception;
 
-import lk.open.validator.model.ErrorWrapper;
+import com.github.jsonmapvalidator.model.ErrorWrapper;
 
 public class OpenValidatorException extends RuntimeException {
 

@@ -1,9 +1,10 @@
-package lk.open.validator;
+package com.github.jsonmapvalidator;
 
 import java.util.Map;
 
-import lk.open.validator.configuration.exception.OpenValidatorException;
-import lk.open.validator.model.ErrorWrapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.jsonmapvalidator.configuration.exception.OpenValidatorException;
+import com.github.jsonmapvalidator.model.ErrorWrapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,15 +17,18 @@ import org.springframework.util.CollectionUtils;
 @Aspect
 @Component
 @ConditionalOnExpression("${aspect.enabled:true}")
-public class JsonMapValidatorAop {
+public class JsonPojoValidatorAop {
 
     @Autowired
     private DynamicJsonValidator jsonValidator;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     //Defines a pointcut that we can use in the @Before,@After, @AfterThrowing, @AfterReturning,@Around specifications
     //The pointcut will look for the @YourAnnotation
     @Pointcut("@annotation(param)")
-    public void annotationPointCutDefinition(JsonMapValidator param) {
+    public void annotationPointCutDefinition(JsonPojoValidator param) {
     }
 
     //Defines a pointcut that we can use in the @Before,@After, @AfterThrowing, @AfterReturning,@Around specifications
@@ -39,12 +43,14 @@ public class JsonMapValidatorAop {
     //ProceedingJointPoint = the reference of the call to the method.
     //The difference between ProceedingJointPoint and JointPoint is that a JointPoint can't be continued (proceeded)
     //A ProceedingJointPoint can be continued (proceeded) and is needed for an Around advice
-    public Object validateMap(ProceedingJoinPoint point, JsonMapValidator param) throws Throwable {
+    public Object validatePojo(ProceedingJoinPoint point, JsonPojoValidator param) throws Throwable {
         Object[] arguments = point.getArgs();
         if (arguments == null) {
             throw new RuntimeException("Json binding failure");
         }
-        ErrorWrapper errorWrapper = jsonValidator.errorList((Map<String, Object>) arguments[0], param.schemaName());
+        String json = objectMapper.writeValueAsString(arguments[0]);
+        Map<String, Object> jsonMap = objectMapper.readValue(json, Map.class);
+        ErrorWrapper errorWrapper = jsonValidator.errorList(jsonMap, param.schemaName());
         if (!CollectionUtils.isEmpty(errorWrapper.getErrorList())) {
             throw new OpenValidatorException(errorWrapper);
         }

@@ -1,4 +1,4 @@
-package lk.open.validator.configuration;
+package com.github.jsonmapvalidator.configuration;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
