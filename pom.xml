@@ -4,7 +4,7 @@
 
   <groupId>lk.open.validator</groupId>
   <artifactId>JsonMapValidator</artifactId>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
 
   <properties>
     <gpg.passphrase>Police@123456789</gpg.passphrase>
@@ -131,7 +131,7 @@
     <connection>scm:git:git://github.com/asiri-kusal/open-json-validator</connection>
     <developerConnection>scm:git:git@github.com/asiri-kusal/open-json-validator.git</developerConnection>
     <url>https://github.com/asiri-kusal/open-json-validator</url>
-    <tag>JsonMapValidator-1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <profiles>
