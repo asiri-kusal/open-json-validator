@@ -6,7 +6,7 @@
 
   <groupId>lk.open.validator</groupId>
   <artifactId>JsonMapValidator</artifactId>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
 
   <properties>
     <gpg.passphrase>Police@123456789</gpg.passphrase>
