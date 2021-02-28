@@ -129,7 +129,7 @@
   </distributionManagement>
   <scm>
     <connection>scm:git:git://github.com/asiri-kusal/open-json-validator</connection>
-    <developerConnection>scm:git:git@github.com/asiri-kusal/open-json-validator.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:asiri-kusal/open-json-validator.git</developerConnection>
     <url>https://github.com/asiri-kusal/open-json-validator</url>
     <tag>HEAD</tag>
   </scm>
