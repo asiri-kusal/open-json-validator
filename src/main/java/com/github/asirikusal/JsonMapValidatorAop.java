@@ -1,9 +1,9 @@
-package com.github.jsonmapvalidator;
+package com.github.asirikusal;
 
 import java.util.Map;
 
-import com.github.jsonmapvalidator.configuration.exception.OpenValidatorException;
-import com.github.jsonmapvalidator.model.ErrorWrapper;
+import com.github.asirikusal.configuration.exception.OpenValidatorException;
+import com.github.asirikusal.model.ErrorWrapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

@@ -1,4 +1,4 @@
-package com.github.jsonmapvalidator;
+package com.github.asirikusal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
 
-import com.github.jsonmapvalidator.model.ErrorMessage;
+import com.github.asirikusal.model.ErrorMessage;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

@@ -1,4 +1,4 @@
-package com.github.jsonmapvalidator.model;
+package com.github.asirikusal.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

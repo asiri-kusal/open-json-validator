@@ -1,4 +1,4 @@
-package com.github.jsonmapvalidator.configuration;
+package com.github.asirikusal.configuration;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

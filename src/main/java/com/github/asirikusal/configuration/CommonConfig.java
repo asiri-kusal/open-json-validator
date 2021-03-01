@@ -1,4 +1,4 @@
-package com.github.jsonmapvalidator.configuration;
+package com.github.asirikusal.configuration;
 
 import java.util.concurrent.Executor;
 
