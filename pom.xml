@@ -4,7 +4,7 @@
 
   <groupId>com.github.asiri-kusal</groupId>
   <artifactId>JsonMapValidator</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
 
   <properties>
     <gpg.passphrase>Police@123456789</gpg.passphrase>
